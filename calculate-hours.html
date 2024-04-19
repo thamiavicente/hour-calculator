@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert hour</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100vh;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        span, h1, button, input {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .calculator {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .calculator__operators {
+            display: flex;
+            gap: 3px;
+            background-color: darkblue;
+            justify-content: center;
+        }
+
+        .calculator__time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calculator__time span {
+            font-size: 32px;
+            color: darkblue;
+        }
+
+        .calculator__time input {
+            width: 50%;
+            padding: 10px;
+            font-size: 32px;
+            border: lightblue 3px solid;
+            color: darkblue;
+        }
+
+        .calculator__time input:hover,
+        .calculator__time input:focus,
+        .calculator__time input:focus-visible {
+            border:  darkblue 3px solid;
+            outline: none;
+        }
+        
+        .calculator__operators button {
+            width: 50%;
+            padding: 10px;
+            font-size: 32px;
+            background-color: lightblue;
+            border: none;
+            color: darkblue;
+            cursor: pointer;
+        }
+
+        .calculator__operators button:hover,
+        .calculator__operators button:focus,
+        .calculator__operators .active {
+            background-color: darkblue;
+            color: lightblue;
+        }
+
+        .calculator__submit button {
+            width: 100%;
+            padding: 10px;
+            font-size: 32px;
+            background-color: lightsteelblue;
+            border: none;
+            color: darkslateblue;
+            cursor: pointer;
+        }
+
+        .calculator__submit button:hover {
+            background-color: darkslateblue;
+            color: lightsteelblue;
+        }
+
+        .calculator__result {
+            font-size: 64px;
+            color: darkslateblue;
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+    </style>
+</head>
+<body>
+    <main class="calculator">
+        <h1 id="result" class="calculator__result">Hour calculator</h1>
+        <div class="calculator__time">
+            <input id="firstHour" type="number"/>
+            <span>:</span>
+            <input id="firstMinute" type="number"/>
+        </div>
+
+        <div class="calculator__operators">
+            <button id="add" onclick="chooseOperator('add')">+</button>
+            <button id="sub" onclick="chooseOperator('sub')">-</button>
+        </div>
+            
+        <div class="calculator__time">
+            <input id="secondHour" type="number"/>
+            <span>:</span>
+            <input id="secondMinute" type="number"/>
+        </div>
+
+        <div class="calculator__submit">
+            <button onclick="handleCalculation()">=</button>
+        </div>
+    </main>
+    
+    <script>
+        let operator = '';
+
+        function chooseOperator(operation) {
+            operator = operation
+            document.querySelectorAll('.calculator__operators button').forEach(button => button.classList.remove('active'))
+            document.querySelector(`#${operation}`).classList.add('active')
+        }
+
+        function handleCalculation() {
+            const values = [
+                `${document.querySelector('#firstHour').value}:${document.querySelector('#firstMinute').value}`,
+                `${document.querySelector('#secondHour').value}:${document.querySelector('#secondMinute').value}`
+            ]
+
+            let resultText = document.querySelector('#result').innerHTML
+
+            if(operator === 'add') return document.querySelector('#result').innerHTML = sumHour(values)
+            return document.querySelector('#result').innerHTML = subHour(values)
+        }
+
+
+        function convertHour([...hours]) {
+            return [...hours].map(hour => {
+                let splitHour = hour.split(':');
+                let hourValue = splitHour[0] ? parseInt(splitHour[0])*60 : 0
+                let minuteValue = splitHour[1] ? parseInt(splitHour[1]) : 0
+                return hourValue + minuteValue
+            })
+        }
+
+        function convertMinute(minuteTotal) {
+            let hour = Math.floor(minuteTotal / 60)
+            let minute = minuteTotal % 60
+            if(minute === 0) minute = '00'
+            if(minute < 0) minute = minute * -1
+            return `${hour}:${minute}`
+        }
+
+        function sumHour([...hours]) {
+            let minutes = convertHour([...hours])
+            let result = 0
+            minutes.forEach(minute => {
+                result += minute
+            })
+            return convertMinute(result)
+        }
+
+        function subHour([...hours]) {
+            let minutes = convertHour([...hours])
+            let result = minutes[0]
+            minutes.forEach((minute, index) => {
+                if(index === 0) return
+                result -= minute
+            })
+            return convertMinute(result)
+        }
+    </script>
+</body>
+</html>
