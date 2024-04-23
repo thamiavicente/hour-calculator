@@ -170,7 +170,7 @@
         function convertMinute(minuteTotal) {
             let hour = Math.floor(minuteTotal / 60)
             let minute = minuteTotal % 60
-            if(minute === 0) minute = '00'
+            if(minute < 10) minute = `0${minute}`
             if(minute < 0) minute = minute * -1
             return `${hour}:${minute}`
         }
