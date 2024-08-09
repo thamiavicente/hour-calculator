@@ -27,6 +27,11 @@
             gap: 20px;
         }
 
+        .calculator__result {
+            font-size: 64px;
+            color: darkslateblue;
+        }
+
         .calculator__operators {
             display: flex;
             gap: 3px;
@@ -76,9 +81,15 @@
             background-color: darkblue;
             color: lightblue;
         }
+        
+        .calculator__submit {
+            display: flex;
+            gap: 3px;
+            background-color: darkslateblue;
+            justify-content: center;
+        }
 
         .calculator__submit button {
-            width: 100%;
             padding: 10px;
             font-size: 32px;
             background-color: lightsteelblue;
@@ -86,15 +97,18 @@
             color: darkslateblue;
             cursor: pointer;
         }
-
+        
         .calculator__submit button:hover {
             background-color: darkslateblue;
             color: lightsteelblue;
         }
 
-        .calculator__result {
-            font-size: 64px;
-            color: darkslateblue;
+        .calculator__sign-equal {
+            width: 80%;
+        }
+
+        .calculator__sign-ans {
+            width: 20%;
         }
 
         /* Chrome, Safari, Edge, Opera */
@@ -132,7 +146,8 @@
         </div>
 
         <div class="calculator__submit">
-            <button onclick="handleCalculation()">=</button>
+            <button class="calculator__sign-equal" onclick="handleCalculation()">=</button>
+            <button class="calculator__sign-ans" onclick="getLastResult()">ans</button>
         </div>
     </main>
     
@@ -192,6 +207,16 @@
                 result -= minute
             })
             return convertMinute(result)
+        }
+
+        function getLastResult() {
+            const lastResult = document.querySelector('#result').innerHTML
+            
+            if(!lastResult.includes(':')) return
+
+            const [hour, minute] = lastResult.split(':')
+            document.querySelector('#firstHour').value = hour
+            document.querySelector('#firstMinute').value = minute           
         }
     </script>
 </body>
