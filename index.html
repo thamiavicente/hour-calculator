@@ -111,6 +111,40 @@
             width: 20%;
         }
 
+        .calculator__converted {
+            font-size: 28px;
+            color: Plum;
+            margin-block: 0.5em;
+            text-align: right;
+            width: 33.3333%;
+            margin-inline: 1.25em;
+        }
+
+        .calculator__converter {
+            display: flex;
+            gap: 3px;
+            background-color: purple;
+            margin-top: 30px;
+        }
+
+        .calculator__converter button {
+            width: 33.3333%;
+            padding: 10px 1.25em;
+            font-size: 20px;
+            background-color: Plum;
+            border: none;
+            color: purple;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .calculator__converter button:hover,
+        .calculator__converter button:focus,
+        .calculator__converter .active {
+            background-color: purple;
+            color: Plum;
+        }
+
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -127,7 +161,7 @@
 </head>
 <body>
     <main class="calculator">
-        <h1 id="result" class="calculator__result">Hour calculator</h1>
+        <h1 id="result" class="calculator__result">hour calculator</h1>
         <div class="calculator__time">
             <input id="firstHour" type="number"/>
             <span>:</span>
@@ -148,6 +182,12 @@
         <div class="calculator__submit">
             <button class="calculator__sign-equal" onclick="handleCalculation()">=</button>
             <button class="calculator__sign-ans" onclick="getLastResult()">ans</button>
+        </div>
+
+        <div class="calculator__converter">
+            <button onclick="convertResulInHour()">result in hour</button>
+            <button onclick="convertResulInMinute()">result in minute</button>
+            <h6 id="converted" class="calculator__converted">time converted</h6>
         </div>
     </main>
     
@@ -209,14 +249,30 @@
             return convertMinute(result)
         }
 
-        function getLastResult() {
+        function splitResult() {
             const lastResult = document.querySelector('#result').innerHTML
-            
-            if(!lastResult.includes(':')) return
+            if(!lastResult.includes(':')) return [hour, minute] = [0,0]
+            return [hour, minute] = lastResult.split(':')
+        }
 
-            const [hour, minute] = lastResult.split(':')
+        function getLastResult() {
+            const [hour, minute] = splitResult()
             document.querySelector('#firstHour').value = hour
             document.querySelector('#firstMinute').value = minute           
+        }
+
+        function convertResulInHour() {
+            const [hour, minute] = splitResult()
+            const minuteInDecimal = (minute / 60).toFixed(2)
+            const hourInDecimal = parseInt(hour) + parseFloat(minuteInDecimal)
+            return document.querySelector('#converted').innerHTML = `${hourInDecimal.toLocaleString('pt-BR')} hours`
+        }
+
+        function convertResulInMinute() {
+            const [hour, minute] = splitResult()
+            const hourInMinute = convertHour([hour])
+            const minuteTotal = parseInt(hourInMinute) + parseInt(minute)
+            return document.querySelector('#converted').innerHTML = `${minuteTotal.toLocaleString('pt-BR')} minutes`
         }
     </script>
 </body>
