@@ -7,10 +7,12 @@
 ## :clipboard: Description
 
 ###### Calculate and convert time in many ways
-
 :heavy_plus_sign: Sum time
+
 :heavy_minus_sign: Subtract time
+
 :heavy_multiplication_x: Convert time in minute
+
 :heavy_division_sign: Convert time in hour
 
 ## :computer: [Deploy](https://thamiavicente.github.io/hour-calculator/)
